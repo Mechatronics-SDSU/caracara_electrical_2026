@@ -1,0 +1,5 @@
+../Core/Src/motor_control.c:68:13:Set_Motors_Neutral	2
+../Core/Src/motor_control.c:74:6:Motor_Update	9
+../Core/Src/motor_control.c:140:6:Motor_Start_Arming	1
+../Core/Src/motor_control.c:60:6:Motor_Init	2
+../Core/Src/motor_control.c:149:6:Motor_Kill	1
