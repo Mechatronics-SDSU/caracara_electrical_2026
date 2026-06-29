@@ -38,34 +38,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := Central MCU Rev A Red Board Depth Sensor
+BUILD_ARTIFACT_NAME := caracara_electrical
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-Central\ MCU\ Rev\ A\ Red\ Board\ Depth\ Sensor.elf \
+caracara_electrical.elf \
 
 MAP_FILES += \
-Central\ MCU\ Rev\ A\ Red\ Board\ Depth\ Sensor.map \
+caracara_electrical.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-Central\ MCU\ Rev\ A\ Red\ Board\ Depth\ Sensor.list \
+caracara_electrical.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: Central\ MCU\ Rev\ A\ Red\ Board\ Depth\ Sensor.elf secondary-outputs
+main-build: caracara_electrical.elf secondary-outputs
 
 # Tool invocations
-Central\ MCU\ Rev\ A\ Red\ Board\ Depth\ Sensor.elf Central\ MCU\ Rev\ A\ Red\ Board\ Depth\ Sensor.map: $(OBJS) $(USER_OBJS) /home/tyoung/caracara_electrical_old/STM32G474RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Central MCU Rev A Red Board Depth Sensor.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/tyoung/caracara_electrical_old/STM32G474RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Central MCU Rev A Red Board Depth Sensor.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+caracara_electrical.elf caracara_electrical.map: $(OBJS) $(USER_OBJS) /home/tyoung/caracara_electrical/STM32G474RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "caracara_electrical.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/tyoung/caracara_electrical/STM32G474RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="caracara_electrical.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -74,14 +74,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Central\ MCU\ Rev\ A\ Red\ Board\ Depth\ Sensor.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Central MCU Rev A Red Board Depth Sensor.list"
+caracara_electrical.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "caracara_electrical.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) Central\ MCU\ Rev\ A\ Red\ Board\ Depth\ Sensor.elf Central\ MCU\ Rev\ A\ Red\ Board\ Depth\ Sensor.list Central\ MCU\ Rev\ A\ Red\ Board\ Depth\ Sensor.map Central\\ MCU\\ Rev\\ A\\ Red\\ Board\\ Depth\\ Sensor.elf default.size.stdout
+	-$(RM) caracara_electrical.elf caracara_electrical.list caracara_electrical.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

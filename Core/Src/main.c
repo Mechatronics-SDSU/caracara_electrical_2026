@@ -17,15 +17,20 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
-#include "usb_device.h"
-#include "system_state.h"
+#include "main.h"			//HAL and MCU stuff
+#include "usb_device.h"		//middleware
+
+
+#include "system_state.h"   //all modules
 #include "button_state.h"
 #include "motor_control.h"
 #include "power_manager.h"
 #include "rgb_led.h"
 #include "safety_manager.h"
 #include "usb_manager.h"
+#include "depth_sensor.h"
+#include "torpedo.h"
+#include "dropper.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -79,17 +84,6 @@ int32_t usbBuffer[16];
 uint16_t adcInt = 0;
 uint8_t rx_data = 0;
 
-
-
-
-const uint8_t MS5837_ADDR = 0x76;
-uint8_t MS5837_RESET = 0x1E;
- uint8_t MS5837_ADC_READ = 0x00;
-const uint8_t MS5837_PROM_READ = 0xA0;
- uint8_t MS5837_CONVERT_D1_8192 = 0x4A;
- uint8_t MS5837_CONVERT_D2_8192 = 0x5A;
-
-
  SystemState state;
 
 /* USER CODE END PV */
@@ -129,12 +123,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	HAL_StatusTypeDef ret;
-	static uint8_t sensor_state = 0;
-	static uint32_t sensor_tick = 0;
-	static uint8_t dataBuffer[3];
-	static uint32_t D1_pressure = 0;
-	static uint32_t D2_temperature = 0;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -173,89 +162,22 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  Motor_Init(&state);
 
+  Motor_Init(&state); //start pwms for motors, torpedo, dropper, and grabber
 
-  HAL_GPIO_WritePin(GPIOC, LED_BLUE_Pin|LED_GREEN_Pin|LED_RED_Pin, GPIO_PIN_RESET);
+  Torpedo_Init(&state);
 
-  HAL_TIM_Base_Start_IT(&htim6);
+  Dropper_Init(&state);
 
+  HAL_GPIO_WritePin(GPIOC, LED_BLUE_Pin|LED_GREEN_Pin|LED_RED_Pin, GPIO_PIN_RESET); //fires external LEDS
 
-  uint16_t coefficients[7];
-  ret = HAL_I2C_Master_Transmit(&hi2c1, MS5837_ADDR << 1, &MS5837_RESET, 1, 5000);
-  HAL_Delay(500);
+  HAL_TIM_Base_Start_IT(&htim6); //idk remmember what this does
 
-  if (ret != HAL_OK) {
-	  // Check the return status and print accordingly
-	  if (ret == HAL_ERROR) {
-		  strcpy((char*)usb_tx_buffer, "Sensor not responding! HAL_ERROR\r\n");
-	  } else if (ret == HAL_BUSY) {
-		  strcpy((char*)usb_tx_buffer, "I2C is busy! HAL_BUSY\r\n");
-	  } else if (ret == HAL_TIMEOUT) {
-	      strcpy((char*)usb_tx_buffer, "I2C operation timed out! HAL_TIMEOUT\r\n");
-	  } else {
-		  strcpy((char*)usb_tx_buffer, "Unknown error occurred!\r\n");
-	  }
-
-
-	  CDC_Transmit_FS((uint8_t *)usb_tx_buffer, strlen((char*)usb_tx_buffer));
-	  HAL_Delay(5000);
+  if (Depth_Sensor_Init(&hi2c1, &state) != HAL_OK)
+  {
+      strcpy((char*)usb_tx_buffer, "Depth sensor init failed!\r\n");
+      CDC_Transmit_FS((uint8_t *)usb_tx_buffer, strlen((char*)usb_tx_buffer));
   }
-  else {
-		strcpy((char*)usb_tx_buffer, "Sensor reset! HAL_OK\r\n");
-		CDC_Transmit_FS((uint8_t *)usb_tx_buffer, strlen((char*)usb_tx_buffer));
-		HAL_Delay(500);
-  }
-
-	// Read calibration values and CRC
-	for ( uint8_t i = 0 ; i < 7 ; i++ )
-	{
-		// Prepare the PROM read command (calculate the correct command address)
-		uint8_t promReadCommand = MS5837_PROM_READ + i * 2;
-		ret = HAL_I2C_Master_Transmit(&hi2c1, MS5837_ADDR << 1, &promReadCommand, 1, 5000);
-
-		HAL_Delay(10);
-
-		// Read the 16-bit coefficient back from the sensor
-		uint8_t dataBuffer[2]; // Buffer to hold the received data
-		HAL_I2C_Master_Receive(&hi2c1, MS5837_ADDR << 1, dataBuffer, 2, HAL_MAX_DELAY);
-		coefficients[i] = (dataBuffer[0] << 8) | dataBuffer[1]; // MSB first
-		char coef_usb_tx_buffer[64];
-		sprintf((char*)coef_usb_tx_buffer, "Coefficient: %u\r\n", coefficients[i]);
-		CDC_Transmit_FS((uint8_t *)coef_usb_tx_buffer, strlen((char*)coef_usb_tx_buffer));
-	}
-
-	// Extract the 4-bit CRC from coefficients[0] (as it's in the upper 4 bits)
-	uint8_t crcRead = coefficients[0] >> 12;
-	uint8_t crcCalculated = crc4(coefficients);
-
-	if (crcCalculated != crcRead)
-	{
-		strcpy((char*)usb_tx_buffer, "CRC Failed.\r\n");
-		CDC_Transmit_FS((uint8_t *)usb_tx_buffer, strlen((char*)usb_tx_buffer));
-		HAL_Delay(500);
-	}
-	else
-	{
-		strcpy((char*)usb_tx_buffer, "CRC Success!\r\n");
-		CDC_Transmit_FS((uint8_t *)usb_tx_buffer, strlen((char*)usb_tx_buffer));
-		HAL_Delay(500);
-	}
-
-
-
-	//Im on yayyyy
-	//HAL_GPIO_WritePin(GPIOB, RED_Pin, GPIO_PIN_SET);
-	//HAL_GPIO_WritePin(GPIOC, LED_BLUE_Pin, GPIO_PIN_SET);
-	//HAL_GPIO_WritePin(GPIOB, BLUE_Pin, GPIO_PIN_SET);
-
-
-	//off
-	//HAL_GPIO_WritePin(GPIOB, RED_Pin, GPIO_PIN_RESET);
-
-	//HAL_GPIO_WritePin(GPIOC, LED_GREEN_Pin, GPIO_PIN_SET);   // does the button light up or the board LED?
-	//HAL_GPIO_WritePin(GPIOB, RED_Pin, GPIO_PIN_SET);        // which one is this?
-
 
   /* USER CODE END 2 */
 
@@ -273,7 +195,7 @@ int main(void)
 
 	  Motor_Update(); //apply motor commands
 
-	  Grabber_Update(); //apply grabber commands
+	  Dropper_Update(); //apply dropper commands
 
 	  Torpedo_Update(); //apply torpedo commands
 
@@ -281,9 +203,7 @@ int main(void)
 
 	  Power_Down(&state); //power off if flagged by button or ORIN input
 
-
-
-	  //HAL_GPIO_WritePin(GPIOC, LED_BLUE_Pin, GPIO_PIN_SET);
+	  Depth_Sensor_Update(); //
 
 
     /* USER CODE END WHILE */
@@ -1260,32 +1180,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         HAL_UART_Receive_IT(&huart1, &rx_data, 1);
     }
 }
-
-
-
-uint8_t crc4(uint16_t coefficients[])
-{
-	int cnt; // simple counter
-	unsigned int n_rem=0; // crc remainder
-	unsigned char n_bit;
-	coefficients[0] = ((coefficients[0]) & 0x0FFF); // CRC byte is replaced by 0
-	coefficients[7] = 0; // Subsidiary value, set to 0
-	for (cnt = 0; cnt < 16; cnt++) // operation is performed on bytes
-	{ // choose LSB or MSB
-	        if (cnt%2 == 1) n_rem ^= (unsigned short) ((coefficients[cnt >> 1]) & 0x00FF);
-	        else n_rem ^= (unsigned short) (coefficients[cnt >> 1] >> 8);
-	        for (n_bit = 8; n_bit > 0; n_bit--)
-	        {
-	        	if (n_rem & (0x8000)) n_rem = (n_rem << 1) ^ 0x3000;
-	        	else n_rem = (n_rem << 1);
-	        }
-	 }
-	n_rem = ((n_rem >> 12) & 0x000F); // final 4-bit remainder is CRC code
-	return (n_rem ^ 0x00);
-}
-
-
-
 
 /* USER CODE END 4 */
 

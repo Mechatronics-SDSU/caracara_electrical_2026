@@ -1,0 +1,4 @@
+../Core/Src/torpedo.c:40:6:Torpedo_Start_Arming	8	static
+../Core/Src/torpedo.c:46:6:Torpedo_Init	8	static
+../Core/Src/torpedo.c:52:6:Torpedo_Update	8	static
+../Core/Src/torpedo.c:83:6:Torpedo_Kill	0	static

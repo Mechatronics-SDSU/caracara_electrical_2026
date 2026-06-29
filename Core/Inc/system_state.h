@@ -42,6 +42,10 @@ typedef struct SystemState{
 	uint8_t motorsArming;
 
 	//MS5837 depth sensor
+	float depth;
+
+	//button state
+	uint8_t greenPressed;
 
 
 }SystemState;

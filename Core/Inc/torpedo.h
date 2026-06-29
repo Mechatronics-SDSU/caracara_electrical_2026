@@ -10,5 +10,10 @@
 
 typedef struct SystemState SystemState;
 
+void Torpedo_Start_Arming(void);
+
+void Torpedo_Init(SystemState *state);
+
+void Torpedo_Update(void);
 
 #endif /* INC_TORPEDO_H_ */

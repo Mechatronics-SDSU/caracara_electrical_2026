@@ -1,0 +1,2 @@
+../Core/Src/depth_sensor.c:147:19:Depth_Sensor_Init	56	static
+../Core/Src/depth_sensor.c:197:6:Depth_Sensor_Update	56	static
