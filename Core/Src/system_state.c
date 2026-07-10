@@ -96,6 +96,5 @@ void SystemState_ApplyPendingUpdate(SystemState *state)
     state->torpedo   = pendingState.torpedo;
 
     stateUpdatePending = 0;
-
     __enable_irq();
 }

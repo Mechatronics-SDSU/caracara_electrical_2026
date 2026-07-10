@@ -14,9 +14,9 @@
 
 extern TIM_HandleTypeDef htim2;
 
-#define GRABBER_NEUTRAL      35999   // 1500us - neutral
-#define GRABBER_MIN          21599   // 900us  - min
-#define GRABBER_MAX          45598   // 1900us - max
+#define GRABBER_NEUTRAL      1500   // 1500us - neutral
+#define GRABBER_MIN          900   // 900us  - min
+#define GRABBER_MAX          1900  // 1900us - max
 #define GRABBER_ARM_TIME_MS  3000
 
 typedef enum {

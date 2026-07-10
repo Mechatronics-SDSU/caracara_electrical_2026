@@ -34,7 +34,8 @@ Core/Src/button_state.o: ../Core/Src/button_state.c \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h \
- ../Core/Inc/main.h ../Core/Inc/button_state.h
+ ../Core/Inc/main.h ../Core/Inc/button_state.h \
+ ../Core/Inc/power_manager.h
 ../Core/Inc/system_state.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h:
 ../Core/Inc/stm32g4xx_hal_conf.h:
@@ -72,3 +73,4 @@ Core/Src/button_state.o: ../Core/Src/button_state.c \
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h:
 ../Core/Inc/main.h:
 ../Core/Inc/button_state.h:
+../Core/Inc/power_manager.h:

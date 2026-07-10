@@ -25,8 +25,8 @@ extern TIM_HandleTypeDef htim20;
  * Max(1900 microseconds) = 1900 * 65536 / 2730 = 45599
  */
 
-#define TORPEDO_NEUTRAL      35999  // neutral is closed state
-#define TORPEDO_OPEN         45599  // 1.9ms - fires torpedo
+#define TORPEDO_NEUTRAL      1500  // neutral is closed state
+#define TORPEDO_OPEN         1900  // 1.9ms - fires torpedo
 #define TORPEDO_ARM_TIME_MS  3000
 
 typedef enum{

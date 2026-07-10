@@ -20,10 +20,11 @@ extern TIM_HandleTypeDef htim15;
 extern TIM_HandleTypeDef htim16;
 extern TIM_HandleTypeDef htim17;
 
-#define MOTOR_NEUTRAL 35999
-#define MOTOR_DEADBAND 750
+#define MOTOR_NEUTRAL 1500
+#define MOTOR_DEADBAND 25
 #define NUM_MOTORS 8
-#define MOTOR_RANGE_MAX 8500
+#define MOTOR_RANGE_MAX 1900
+#define MOTOR_RANGE_MIN 1100
 #define ESC_ARM_TIME_MS 3000
 
 //forward declearations, im too lazy to reorder everything
@@ -105,22 +106,23 @@ void Motor_Update(void)
 
 static void Set_Motor_PWM(TIM_HandleTypeDef *htim, int32_t value)
 {
-    if((value > MOTOR_RANGE_MAX) || (value < -MOTOR_RANGE_MAX)) //if motor values exceed motor range set to neutral
+
+    if((value > MOTOR_RANGE_MAX) || (value < MOTOR_RANGE_MIN)) //if motor values exceed motor range set to neutral
     {
-        value = 0;
+        value = 1500;
     }
 
-    if(value == 0) //neutral
+    if(value == 1500) //neutral
     {
         __HAL_TIM_SET_COMPARE(htim, TIM_CHANNEL_1, MOTOR_NEUTRAL);
     }
-    else if(value > 0) //forward
+    else if(value > 1525) //forward
     {
-        __HAL_TIM_SET_COMPARE(htim, TIM_CHANNEL_1, MOTOR_NEUTRAL + MOTOR_DEADBAND + value);
+        __HAL_TIM_SET_COMPARE(htim, TIM_CHANNEL_1, value);
     }
     else //reverse
     {
-        __HAL_TIM_SET_COMPARE(htim, TIM_CHANNEL_1, MOTOR_NEUTRAL - MOTOR_DEADBAND + value);
+        __HAL_TIM_SET_COMPARE(htim, TIM_CHANNEL_1, value);
     }
 }
 

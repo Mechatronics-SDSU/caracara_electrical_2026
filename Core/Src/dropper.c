@@ -17,8 +17,8 @@ extern TIM_HandleTypeDef htim8;
  * Max(1900 microseconds) = 1900 * 65536 / 2730 = 45599
  */
 
-#define DROPPER_NEUTRAL 35999  //is neutral value is closed state
-#define DROPPER_OPEN    26400 //1.1 ms
+#define DROPPER_NEUTRAL 1500  //is neutral value is closed state
+#define DROPPER_OPEN    1100 //1.1 ms
 #define DROPPER_ARM_TIME_MS  3000
 
 typedef enum{

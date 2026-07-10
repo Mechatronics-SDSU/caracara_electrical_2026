@@ -1,5 +1,5 @@
-../Core/Src/motor_control.c:68:13:Set_Motors_Neutral	0	static
-../Core/Src/motor_control.c:74:6:Motor_Update	24	static
-../Core/Src/motor_control.c:140:6:Motor_Start_Arming	8	static
-../Core/Src/motor_control.c:60:6:Motor_Init	16	static
-../Core/Src/motor_control.c:149:6:Motor_Kill	0	static
+../Core/Src/motor_control.c:69:13:Set_Motors_Neutral	0	static
+../Core/Src/motor_control.c:75:6:Motor_Update	24	static
+../Core/Src/motor_control.c:142:6:Motor_Start_Arming	8	static
+../Core/Src/motor_control.c:61:6:Motor_Init	16	static
+../Core/Src/motor_control.c:151:6:Motor_Kill	0	static

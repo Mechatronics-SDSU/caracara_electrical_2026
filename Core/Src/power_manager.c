@@ -17,13 +17,9 @@
 
 void Power_Down(SystemState *state){
 	if ((state->powerOff) || (state->powerDownButton)){
+	    //HAL_GPIO_WritePin(GPIOC, LED_RED_Pin|LED_GREEN_Pin|LED_BLUE_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOC, POWER_OFF_Pin, GPIO_PIN_SET);
 
-		//Motor_Kill();
-		//HAL_GPIO_WritePin(GPIOC, LED_RED_Pin|LED_GREEN_Pin|LED_BLUE_Pin, GPIO_PIN_SET);
-
-		HAL_GPIO_WritePin(GPIOC, POWER_OFF_Pin, GPIO_PIN_RESET);
-
-		//__disable_irq();
 	}
 }
 

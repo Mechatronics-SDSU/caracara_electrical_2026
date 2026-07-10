@@ -9,6 +9,7 @@
 #include "stm32g4xx_hal.h"
 #include "main.h"
 #include "button_state.h"
+#include "power_manager.h"
 
 /*Weird LED color rules - should be replaced with an enum
  * 'R' = Blue LED is on
@@ -36,6 +37,8 @@ void Button_Update(SystemState *state){
 
 
 	GPIO_PinState buttonState = HAL_GPIO_ReadPin(GPIOC, BUTTON_IN_Pin); // read the button status
+
+	uint8_t secondPressEdge = ((checkRedMode == 1) && (buttonReleased == 1) && (buttonState == GPIO_PIN_RESET) && ((HAL_GetTick() - wentHighTime) > 200));
 
 
 	if ((buttonState == GPIO_PIN_RESET) && (buttonPushedAlready == 0)) // if the button gets pulled low (pushed) and it wasn't pulled low on the previous cycle
@@ -77,9 +80,10 @@ void Button_Update(SystemState *state){
 		    buttonPushedAlready = 0; //clear pushed flag so next press is detected
 		}
 
-		if ((checkRedMode == 1) && (buttonReleased == 1) && (buttonState == GPIO_PIN_RESET) && ((HAL_GetTick() - wentHighTime) > 200)){
+		if (secondPressEdge){
 		    powerDown = 1; // power down if the red led is flashing and gets pressed a second time
 		    state->powerDownButton = 1;
+		    Power_Down(state);
 	        //CDC_Transmit_FS((uint8_t *)"Power Off\r\n", 11);
 		    // note that switch bounce is an issue with a standard push button. Hopefully the piezo button won't have any issues
 		}
