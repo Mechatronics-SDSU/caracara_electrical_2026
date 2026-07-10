@@ -57,7 +57,6 @@ void Safety_Manager_Update(SystemState *state){
 			  Dropper_Start_Arming();
 
 		  }
-
 }
 
 

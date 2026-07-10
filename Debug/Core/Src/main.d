@@ -41,7 +41,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/safety_manager.h ../Core/Inc/motor_control.h \
  ../Core/Inc/usb_manager.h ../Core/Inc/depth_sensor.h \
  ../Core/Inc/system_state.h ../Core/Inc/torpedo.h ../Core/Inc/dropper.h \
- ../USB_Device/App/usbd_cdc_if.h \
+ ../Core/Inc/grabber.h ../USB_Device/App/usbd_cdc_if.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
@@ -98,6 +98,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/system_state.h:
 ../Core/Inc/torpedo.h:
 ../Core/Inc/dropper.h:
+../Core/Inc/grabber.h:
 ../USB_Device/App/usbd_cdc_if.h:
 ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h:
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:

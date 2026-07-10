@@ -86,7 +86,7 @@ void Motor_Update(void)
 
         case MOTOR_STATE_READY:
 
-        	state.motorsArming = 0; //LED stops flashing
+        	systemState->motorsArming = 0; //LED stops flashing
 
             Motor_Apply_Commands();
             break;
@@ -143,7 +143,7 @@ void Motor_Start_Arming(void){
 	motorState = MOTOR_STATE_ARMING;
 	armingStartTime = HAL_GetTick();  //use ticks instead of delays to allow other code to keep running
 
-	state.motorsArming = 1; //variable to indicate motors are arming(used by LED)
+	systemState->motorsArming = 1; //variable to indicate motors are arming(used by LED)
 }
 
 void Motor_Kill(void)

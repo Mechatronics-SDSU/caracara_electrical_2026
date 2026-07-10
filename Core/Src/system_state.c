@@ -74,3 +74,28 @@ int8_t SystemState_UpdateFromUSB(SystemState *state, const uint8_t *buffer, uint
 
     return 0;
 }
+
+
+SystemState pendingState;
+volatile uint8_t stateUpdatePending = 0;
+
+void SystemState_ApplyPendingUpdate(SystemState *state)
+{
+    if (!stateUpdatePending) {
+        return;
+    }
+
+    __disable_irq();
+
+    memcpy(state->motorValues, pendingState.motorValues, sizeof(state->motorValues));
+    state->killState = pendingState.killState;
+    state->powerOff  = pendingState.powerOff;
+    state->servo1    = pendingState.servo1;
+    state->servo2    = pendingState.servo2;
+    state->dropper   = pendingState.dropper;
+    state->torpedo   = pendingState.torpedo;
+
+    stateUpdatePending = 0;
+
+    __enable_irq();
+}

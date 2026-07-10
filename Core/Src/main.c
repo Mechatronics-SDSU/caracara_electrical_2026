@@ -31,6 +31,7 @@
 #include "depth_sensor.h"
 #include "torpedo.h"
 #include "dropper.h"
+#include "grabber.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -72,7 +73,6 @@ TIM_HandleTypeDef htim17;
 TIM_HandleTypeDef htim20;
 
 UART_HandleTypeDef huart1;
-UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint8_t usb_tx_buffer[64] = "Smoke runtz\r\n";  //this buffer appears to only be used for debugging messages, as all useful telemetry is sent over uart
@@ -84,7 +84,7 @@ int32_t usbBuffer[16];
 uint16_t adcInt = 0;
 uint8_t rx_data = 0;
 
- SystemState state;
+SystemState state;
 
 /* USER CODE END PV */
 
@@ -105,7 +105,7 @@ static void MX_USART1_UART_Init(void);
 static void MX_TIM6_Init(void);
 static void MX_TIM7_Init(void);
 static void MX_I2C1_Init(void);
-static void MX_USART2_UART_Init(void);
+
 /* USER CODE BEGIN PFP */
 uint8_t crc4(uint16_t coefficients[]);
 /* USER CODE END PFP */
@@ -159,7 +159,6 @@ int main(void)
   MX_TIM6_Init();
   MX_TIM7_Init();
   MX_I2C1_Init();
-  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
 
@@ -169,9 +168,11 @@ int main(void)
 
   Dropper_Init(&state);
 
+  Grabber_Init(&state);
+
   HAL_GPIO_WritePin(GPIOC, LED_BLUE_Pin|LED_GREEN_Pin|LED_RED_Pin, GPIO_PIN_RESET); //fires external LEDS
 
-  HAL_TIM_Base_Start_IT(&htim6); //idk remmember what this does
+  HAL_TIM_Base_Start_IT(&htim6); //idk remmember what this does - some interrupt...hmmmm -
 
   if (Depth_Sensor_Init(&hi2c1, &state) != HAL_OK)
   {
@@ -186,6 +187,8 @@ int main(void)
   while (1)
   {
 
+	  SystemState_ApplyPendingUpdate(&state); //atomic update of the usbBuffer.
+
 	  //system state updates upon USB transmission
 	  USB_Manager_Update(&state); //checks connection
 
@@ -198,6 +201,8 @@ int main(void)
 	  Dropper_Update(); //apply dropper commands
 
 	  Torpedo_Update(); //apply torpedo commands
+
+	  Grabber_Update(); //ooooooooh monkey AHAHAHAHAHA
 
 	  Button_Update(&state); //handle button input
 
@@ -420,6 +425,15 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+  {
+      Error_Handler();
+  }
+  if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+      Error_Handler();
+  }
+
   /* USER CODE BEGIN TIM2_Init 2 */
 
   /* USER CODE END TIM2_Init 2 */
@@ -1034,54 +1048,6 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE BEGIN USART1_Init 2 */
 
   /* USER CODE END USART1_Init 2 */
-
-}
-
-/**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART2_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART2_Init 0 */
-
-  /* USER CODE END USART2_Init 0 */
-
-  /* USER CODE BEGIN USART2_Init 1 */
-
-  /* USER CODE END USART2_Init 1 */
-  huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
-  huart2.Init.WordLength = UART_WORDLENGTH_8B;
-  huart2.Init.StopBits = UART_STOPBITS_1;
-  huart2.Init.Parity = UART_PARITY_NONE;
-  huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&huart2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_SetTxFifoThreshold(&huart2, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_SetRxFifoThreshold(&huart2, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_UARTEx_DisableFifoMode(&huart2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART2_Init 2 */
-
-  /* USER CODE END USART2_Init 2 */
 
 }
 

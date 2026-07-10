@@ -267,9 +267,9 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 
 
   uint8_t len = (uint8_t) *Len;
-  memcpy (usbBuffer, Buf, len);
 
-  SystemState_UpdateFromUSB(&state, usbBuffer, len);
+  SystemState_UpdateFromUSB(&pendingState, Buf, len);
+  stateUpdatePending = 1;
 
   return (USBD_OK);
   /* USER CODE END 6 */

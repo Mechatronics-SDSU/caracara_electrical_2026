@@ -11,6 +11,11 @@
 
 extern TIM_HandleTypeDef htim8;
 
+/*
+ * Neutral(1500μs) = 1500 * 65536 / 2730 ≈ 35999
+ * Min(900 microseconds) = 900  * 65536 / 2730 ≈ 21599
+ * Max(1900 microseconds) = 1900 * 65536 / 2730 = 45599
+ */
 
 #define DROPPER_NEUTRAL 35999  //is neutral value is closed state
 #define DROPPER_OPEN    26400 //1.1 ms

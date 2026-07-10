@@ -1,4 +1,4 @@
-../Core/Src/torpedo.c:40:6:Torpedo_Start_Arming	1
-../Core/Src/torpedo.c:46:6:Torpedo_Init	1
-../Core/Src/torpedo.c:52:6:Torpedo_Update	6
-../Core/Src/torpedo.c:83:6:Torpedo_Kill	1
+../Core/Src/torpedo.c:46:6:Torpedo_Start_Arming	1
+../Core/Src/torpedo.c:52:6:Torpedo_Init	1
+../Core/Src/torpedo.c:58:6:Torpedo_Update	6
+../Core/Src/torpedo.c:89:6:Torpedo_Kill	1

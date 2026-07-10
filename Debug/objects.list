@@ -1,7 +1,6 @@
 "./Core/Src/button_state.o"
 "./Core/Src/depth_sensor.o"
 "./Core/Src/dropper.o"
-"./Core/Src/dumpForOldCode.o"
 "./Core/Src/gpio.o"
 "./Core/Src/grabber.o"
 "./Core/Src/main.o"

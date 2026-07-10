@@ -1,2 +1,4 @@
-../Core/Src/grabber.c:18:6:Grabber_Init	1
-../Core/Src/grabber.c:22:6:Set_Grabber_Neutral	1
+../Core/Src/grabber.c:49:6:Grabber_Start_Arming	1
+../Core/Src/grabber.c:56:6:Grabber_Init	1
+../Core/Src/grabber.c:75:6:Grabber_Update	7
+../Core/Src/grabber.c:101:6:Grabber_Kill	1

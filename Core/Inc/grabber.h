@@ -10,6 +10,11 @@
 
 typedef struct SystemState SystemState;
 
+void Grabber_Init(SystemState *state);
+void Grabber_Update(void);
+void Grabber_Kill(void);
+void Grabber_Start_Arming(void);
+
 
 
 #endif /* INC_GRABBER_H_ */

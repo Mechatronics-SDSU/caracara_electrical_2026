@@ -25,8 +25,8 @@ typedef struct SystemState{
 	uint32_t motorValues[8]; //indices 0-7 correspond to motors 0-7
 	uint32_t killState;
 	uint32_t powerOff;
-	uint32_t servo1;
-	uint32_t servo2;
+	uint32_t servo1; //for the grabber
+	uint32_t servo2; //for the grabber
 	uint32_t dropper;
 	uint32_t torpedo;
 
@@ -49,6 +49,17 @@ typedef struct SystemState{
 
 
 }SystemState;
+
+/*
+ *  @brief
+ *  a staging buffer and flag are used so USB-sourced fields are applied to the live SystemState
+ *  struct atomically, from the main loop, instead of being written directly from USB
+ *  interrupt context.
+ */
+extern SystemState pendingState;
+extern volatile uint8_t stateUpdatePending;
+
+void SystemState_ApplyPendingUpdate(SystemState *state);
 
 /* Parse a raw USB receive buffer into state.
  * Returns 0 on success, -1 if the packet is too short. */

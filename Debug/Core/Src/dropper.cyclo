@@ -1,4 +1,4 @@
-../Core/Src/dropper.c:33:6:Dropper_Start_Arming	1
-../Core/Src/dropper.c:40:6:Dropper_Init	1
-../Core/Src/dropper.c:47:6:Dropper_Update	6
-../Core/Src/dropper.c:75:6:Dropper_Kill	1
+../Core/Src/dropper.c:38:6:Dropper_Start_Arming	1
+../Core/Src/dropper.c:45:6:Dropper_Init	1
+../Core/Src/dropper.c:52:6:Dropper_Update	6
+../Core/Src/dropper.c:80:6:Dropper_Kill	1

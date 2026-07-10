@@ -1,1 +1,2 @@
 ../Core/Src/system_state.c:52:8:SystemState_UpdateFromUSB	12	static
+../Core/Src/system_state.c:82:6:SystemState_ApplyPendingUpdate	20	static,ignoring_inline_asm
