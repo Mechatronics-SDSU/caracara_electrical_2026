@@ -27,9 +27,10 @@ static uint8_t buttonRepressed = 0;
 static uint8_t checkRedMode = 0;
 static uint32_t wentLowTime = 0;
 static uint32_t wentHighTime = 0;
-static uint8_t greenPressed;
+static uint8_t greenPressed = 0;s;
 static uint8_t bluePressed;
 static uint8_t powerDown;
+static uint32_t greenPressedTime = 0;
 
 
 
@@ -39,6 +40,10 @@ void Button_Update(SystemState *state){
 	GPIO_PinState buttonState = HAL_GPIO_ReadPin(GPIOC, BUTTON_IN_Pin); // read the button status
 
 	uint8_t secondPressEdge = ((checkRedMode == 1) && (buttonReleased == 1) && (buttonState == GPIO_PIN_RESET) && ((HAL_GetTick() - wentHighTime) > 200));
+
+	if ((state->greenPressed) && ((HAL_GetTick() - greenPressedTime) >= 100)){
+		state->greenPressed = 0;
+	}
 
 
 	if ((buttonState == GPIO_PIN_RESET) && (buttonPushedAlready == 0)) // if the button gets pulled low (pushed) and it wasn't pulled low on the previous cycle
@@ -64,7 +69,8 @@ void Button_Update(SystemState *state){
 		   }
 		    if(color == 'B'){
 		    	//CDC_Transmit_FS((uint8_t *)"Green\r\n", 7);
-		    	greenPressed = 1;
+		    	state->greenPressed = 1;
+		    	greenPressedTime = HAL_GetTick();
 		    	// fix me transmit something over USB so software can know we want to enter autonomous mode or whatever
 		    }
 		    else if (color == 'R'){ // happens when the actual led is Blue

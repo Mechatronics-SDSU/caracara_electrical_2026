@@ -109,9 +109,11 @@ static void compute_depth(void){
 	systemState->depth       = gauge_pressure / (SEAWATER_DENSITY * GRAVITY);
 
 	// Debug
+	/*
 	char buf[64];
 	sprintf(buf, "D1:%lu D2:%lu Depth:%.4f\r\n", D1, D2, systemState->depth);
 	CDC_Transmit_FS((uint8_t*)buf, strlen(buf));
+	*/
 
 }
 
