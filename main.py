@@ -127,13 +127,11 @@ while True:
     depth_raw = get_depth_m()
     depth_filtered = (1 - alpha) * depth_filtered + alpha * depth_raw
 
-    print(
-        "Battery: {:.2f} V | Pressure: {:.2f} mbar | Temp: {:.2f} C | Depth: {:.3f} m".format(
-            battery_v,
-            pressure_mbar,
-            temperature_c,
-            depth_filtered
-        )
-    )
+    print("BAT:{:.2f},DEPTH:{:.3f},PRESS:{:.2f},TEMP:{:.2f}".format(
+        battery_v,
+        depth_filtered,
+        pressure_mbar,
+        temperature_c
+    ))
 
     sleep(1)
