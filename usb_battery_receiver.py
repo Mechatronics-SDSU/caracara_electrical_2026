@@ -4,7 +4,7 @@ import serial
 baud_rate = 115200
 
 
-class USB_Battery_Receiver_Windows:
+class USB_Battery_Receiver:
     def __init__(self):
         self.srl = None
         self.port = None
