@@ -142,6 +142,12 @@ try:
 except OSError as e:
     print("Bar02 sensor init falied: ", e)
 
+# Handshake 
+if sensor_has_reading: #If reading exists (true), send BAR02 "ok" message
+    print("SENSOR,BAR02:OK")
+else:
+    print("SENSOR,BAR02:FAILED")
+
 while True:
 
     battery_v = read_battery_voltage() # Reads voltage from GP26
