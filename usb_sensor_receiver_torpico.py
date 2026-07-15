@@ -14,8 +14,8 @@ class USB_Sensor_Receiver_Torpico:
             ports = [] # List that will be filled with serial ports connected to a computer
 
             for port in serial.tools.list_ports.comports(): # Loops through all comports
-                if port.device != "/dev/ttyACM0" or port.device != "COM4":  # Ignore bad Linux and Windows port
-                    ports.append(port.device) # Add useable comports to ports array
+                #if port.device != "/dev/ttyACM0" or port.device != "COM4":  # Ignore bad Linux and Windows port
+                ports.append(port.device) # Add useable comports to ports array
 
             return ports # Return all useable comports
 
