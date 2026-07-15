@@ -1,5 +1,5 @@
 import time
-from torpico_code.usb_sensor_receiver_torpico import USB_Sensor_Receiver_Torpico
+from usb_sensor_receiver_torpico import USB_Sensor_Receiver_Torpico
 
 sensor = USB_Sensor_Receiver_Torpico()
 
