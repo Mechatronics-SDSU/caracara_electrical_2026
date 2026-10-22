@@ -16,7 +16,7 @@ USB host (Orin) | v CDC_Receive_FS()  [usbd_cdc_if.c, runs in USB interrupt cont
 
 SystemState_UpdateFromUSB(&pendingState, Buf, len)  [system_state.c] | v pendingState  (private staging struct, written only by the USB ISR) | |   stateUpdatePending = 1 v SystemState_ApplyPendingUpdate(&state)  [system_state.c, called from main loop] |   -- short __disable_irq()/__enable_irq() critical section -- |   copies motorValues, killState, powerOff, servo1, servo2, |   dropper, torpedo from pendingState into state, then clears flag v 
 
-**Outdated:** I believe that this struck is no longer accurate to what is reflected in the code. While I am making this comment from memory four months after the fact, I think the struct siz increased from 48 bytes to 52 or 56 - and I also think that some of the variables listed in this struct were replaced with other, more important data. 
+**Outdated:** I believe that this struct is no longer accurate to what is reflected in the code. While I am making this comment from memory four months after the fact, I think the struct size increased from 48 bytes to 52 or 56 - and I also think that some of the variables listed in this struct were replaced with other, more important data. 
 
 SystemState *state  (single global struct, defined in system_state.h) | 
 
