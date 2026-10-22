@@ -1,0 +1,2 @@
+../Core/Src/bitmask.c:23:6:Bitmask_Init	0	static
+../Core/Src/bitmask.c:28:9:Bitmask_GetBit	0	static

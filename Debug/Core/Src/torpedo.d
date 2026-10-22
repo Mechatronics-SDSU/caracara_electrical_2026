@@ -33,7 +33,8 @@ Core/Src/torpedo.o: ../Core/Src/torpedo.c ../Core/Inc/torpedo.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h \
  ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h \
- ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
+ ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h \
+ ../Core/Inc/bitmask.h
 ../Core/Inc/torpedo.h:
 ../Core/Inc/system_state.h:
 ../Core/Inc/main.h:
@@ -71,3 +72,4 @@ Core/Src/torpedo.o: ../Core/Src/torpedo.c ../Core/Inc/torpedo.h \
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h:
 ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h:
+../Core/Inc/bitmask.h:

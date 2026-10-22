@@ -16,6 +16,7 @@
 #include "torpedo.h"
 #include "system_state.h"
 #include "main.h"
+#include "bitmask.h"
 
 extern TIM_HandleTypeDef htim20;
 
@@ -26,8 +27,10 @@ extern TIM_HandleTypeDef htim20;
  */
 
 #define TORPEDO_NEUTRAL      1500  // neutral is closed state
-#define TORPEDO_OPEN         1900  // 1.9ms - fires torpedo
+#define TORPEDO_MIN          900    //0.9microsec
+#define TORPEDO_MAX          1900  // 1.9microsec - fires torpedo
 #define TORPEDO_ARM_TIME_MS  3000
+#define TORPEDO_BITMASK_IDX  13
 
 typedef enum{
     TORPEDO_ARMING,
@@ -65,16 +68,21 @@ void Torpedo_Update(void){
             break;
 
         case TORPEDO_READY:
-            if(systemState->torpedo){
-                __HAL_TIM_SET_COMPARE(&htim20, TIM_CHANNEL_1, TORPEDO_OPEN);
-                /*
-            	char buf[64];
-            	sprintf(buf, "TORPEDO_READY reached, torpedo=%lu\r\n", systemState->torpedo);
-            	CDC_Transmit_FS((uint8_t*)buf, strlen(buf));
-            	*/
-            }
-            else
-                Set_Torpedo_Neutral();
+        	 if (!(Bitmask_GetBit(systemState->bitmask, TORPEDO_BITMASK_IDX))){
+        		 break;
+        	 }
+        	 else if((systemState->torpedo < 0)) //if motor values exceed motor range set to neutral
+             {
+            	 Set_Torpedo_Neutral();
+             }
+             else if(systemState->torpedo == TORPEDO_NEUTRAL) //neutral
+             {
+                 __HAL_TIM_SET_COMPARE(&htim20, TIM_CHANNEL_1, TORPEDO_NEUTRAL);
+             }
+             else //reverse
+             {
+                 __HAL_TIM_SET_COMPARE(&htim20, TIM_CHANNEL_1, systemState->torpedo);
+             }
             break;
 
         case TORPEDO_KILLED:
@@ -85,7 +93,6 @@ void Torpedo_Update(void){
             break;
     }
 }
-
 void Torpedo_Kill(void){
     torpedoState = TORPEDO_KILLED;
     Set_Torpedo_Neutral();

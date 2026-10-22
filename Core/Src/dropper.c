@@ -8,6 +8,7 @@
 #include "dropper.h"
 #include "system_state.h"
 #include "main.h"
+#include "bitmask.h"
 
 extern TIM_HandleTypeDef htim8;
 
@@ -17,9 +18,11 @@ extern TIM_HandleTypeDef htim8;
  * Max(1900 microseconds) = 1900 * 65536 / 2730 = 45599
  */
 
-#define DROPPER_NEUTRAL 1500  //is neutral value is closed state
-#define DROPPER_OPEN    1100 //1.1 ms
+#define DROPPER_NEUTRAL 	 1000 	//is neutral value is closed state
+#define DROPPER_MIN     	 0    	//min
+#define DROPPER_MAX    	     2000 	//1.1 ms
 #define DROPPER_ARM_TIME_MS  3000
+#define DROPPER_BITMASK_IDX  12
 
 typedef enum{
 	DROPPER_READY,
@@ -59,12 +62,21 @@ void Dropper_Update(void){
             break;
 
 		case DROPPER_READY:
-			if (systemState->dropper){
-				 __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_1, DROPPER_OPEN);
+			if (!(Bitmask_GetBit(systemState->bitmask, DROPPER_BITMASK_IDX))){
+					break;
 			}
-			else{
+			else if((systemState->dropper < 0)) //if motor values exceed motor range set to neutral
+            {
 				Set_Dropper_Neutral();
-			}
+		     }
+             else if(systemState->dropper == 1000) //neutral
+             {
+              __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_1,DROPPER_NEUTRAL);
+		     }
+		     else //reverse
+		     {
+			 __HAL_TIM_SET_COMPARE(&htim8, TIM_CHANNEL_1, systemState->dropper);
+		     }
 			break;
 
 		case DROPPER_KILLED:

@@ -1,3 +1,4 @@
+"./Core/Src/bitmask.o"
 "./Core/Src/button_state.o"
 "./Core/Src/depth_sensor.o"
 "./Core/Src/dropper.o"

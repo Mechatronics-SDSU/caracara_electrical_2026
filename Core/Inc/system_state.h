@@ -29,6 +29,7 @@ typedef struct SystemState{
 	uint32_t servo2; //for the grabber
 	uint32_t dropper;
 	uint32_t torpedo;
+	uint16_t bitmask; //used to make sure values are not updated when they dont need to be updated
 
 	//Kill System State
 	uint8_t intKillState;

@@ -9,6 +9,7 @@
 #include "grabber.h"
 #include "system_state.h"
 #include "main.h"
+#include "bitmask.h"
 
 
 
@@ -18,6 +19,8 @@ extern TIM_HandleTypeDef htim2;
 #define GRABBER_MIN          900   // 900us  - min
 #define GRABBER_MAX          1900  // 1900us - max
 #define GRABBER_ARM_TIME_MS  3000
+#define GRABBER1_BITMASK_IDX 10
+#define GRABBER2_BITMASK_IDX 11
 
 typedef enum {
     GRABBER_ARMING,
@@ -63,7 +66,7 @@ void Grabber_Init(SystemState *state)
 
 static void Set_Grabber_PWM(TIM_HandleTypeDef *htim, uint32_t channel, uint32_t value)
 {
-    if (value < GRABBER_MIN || value > GRABBER_MAX)
+    if (value < 0)
     {
         __HAL_TIM_SET_COMPARE(htim, channel, GRABBER_NEUTRAL);
         return;
@@ -84,8 +87,12 @@ void Grabber_Update(void)
             break;
 
         case GRABBER_READY:
-        	Set_Grabber_PWM(&htim2, TIM_CHANNEL_4, systemState->servo1);
-        	Set_Grabber_PWM(&htim2, TIM_CHANNEL_2, systemState->servo2);
+        	if (Bitmask_GetBit(systemState->bitmask, GRABBER1_BITMASK_IDX)){
+        		Set_Grabber_PWM(&htim2, TIM_CHANNEL_4, systemState->servo1);
+        	}
+        	if (Bitmask_GetBit(systemState->bitmask, GRABBER2_BITMASK_IDX)){
+        	    Set_Grabber_PWM(&htim2, TIM_CHANNEL_4, systemState->servo2);
+        	}
             break;
 
         case GRABBER_KILLED:

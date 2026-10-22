@@ -15,13 +15,19 @@
 
 #include <stdint.h>
 
+#define KILL_STATE_BIT_IDX 8
+
 //internal kill represents kill command come from usbpacket
 //external kill represents kill command come from button
-//previous values used to detect edge cases
+//previous values used to detect edge cases.
 static uint8_t prevIntKillState = 0;
 static uint8_t prevExtKillState = 0;
 
 void Safety_Manager_Update(SystemState *state){
+
+	if (!(Bitmask_GetBit(state->bitmask, KILL_STATE_BIT_IDX))){
+		return;
+	}
 
 	state->extKillState = HAL_GPIO_ReadPin(EXT_KILL_GPIO_Port, EXT_KILL_Pin);
 

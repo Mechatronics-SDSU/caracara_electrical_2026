@@ -27,8 +27,6 @@ static uint8_t buttonRepressed = 0;
 static uint8_t checkRedMode = 0;
 static uint32_t wentLowTime = 0;
 static uint32_t wentHighTime = 0;
-static uint8_t greenPressed = 0;s;
-static uint8_t bluePressed;
 static uint8_t powerDown;
 static uint32_t greenPressedTime = 0;
 

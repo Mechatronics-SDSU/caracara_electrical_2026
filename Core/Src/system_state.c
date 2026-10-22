@@ -27,6 +27,7 @@
  *   44     [11]   servo2          (uint32_t, little-endian)
  *   48     [12]   dropper         (uint32_t, little-endian)
  *   52     [13]   torpedo         (uint32_t, little-endian)
+ *   56     [14]   bitmask
  *
  *
  *   While we are no longer using the array system, I think that keeping it within an array format will
@@ -43,9 +44,10 @@
 #define USB_IDX_SERVO_2            11
 #define USB_IDX_DROPPER            12
 #define USB_IDX_TORPEDO            13
+#define USB_IDX_BITMASK            14
 
 #define USB_OFFSET(idx)            ((idx) * USB_WORD_SIZE)
-#define USB_PACKET_MIN_LEN         56   // 14 fields × 4 bytes
+#define USB_PACKET_MIN_LEN         60   // 15 fields × 4 bytes
 
 
 
@@ -71,6 +73,7 @@ int8_t SystemState_UpdateFromUSB(SystemState *state, const uint8_t *buffer, uint
     memcpy(&state->servo2, buffer + USB_OFFSET(USB_IDX_SERVO_2), USB_WORD_SIZE);
     memcpy(&state->dropper,  buffer + USB_OFFSET(USB_IDX_DROPPER),  USB_WORD_SIZE);
     memcpy(&state->torpedo,  buffer + USB_OFFSET(USB_IDX_TORPEDO),  USB_WORD_SIZE);
+    memcpy(&state->bitmask,  buffer + USB_OFFSET(USB_IDX_BITMASK),  USB_WORD_SIZE);
 
     return 0;
 }
@@ -94,6 +97,7 @@ void SystemState_ApplyPendingUpdate(SystemState *state)
     state->servo2    = pendingState.servo2;
     state->dropper   = pendingState.dropper;
     state->torpedo   = pendingState.torpedo;
+    state->bitmask   = pendingState.bitmask;
 
     stateUpdatePending = 0;
     __enable_irq();

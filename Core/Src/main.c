@@ -32,6 +32,7 @@
 #include "torpedo.h"
 #include "dropper.h"
 #include "grabber.h"
+#include "bitmask.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -161,6 +162,7 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
+  Bitmask_Init(&state);
 
   Motor_Init(&state); //start pwms for motors, torpedo, dropper, and grabber
 

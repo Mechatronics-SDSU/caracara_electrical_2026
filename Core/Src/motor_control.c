@@ -9,6 +9,7 @@
 #include "motor_control.h"
 #include "system_state.h"
 #include "main.h"
+#include "bitmask.h"
 
 
 extern TIM_HandleTypeDef htim1;
@@ -26,6 +27,7 @@ extern TIM_HandleTypeDef htim17;
 #define MOTOR_RANGE_MAX 1900
 #define MOTOR_RANGE_MIN 1100
 #define ESC_ARM_TIME_MS 3000
+
 
 //forward declearations, im too lazy to reorder everything
 static void Motor_Apply_Commands(void);
@@ -59,7 +61,6 @@ static SystemState *systemState; //static pointer for globalState - pointer does
 
 
 void Motor_Init(SystemState *state){
-
 	systemState = state;
 
 	Start_PWMS();
@@ -128,7 +129,9 @@ static void Set_Motor_PWM(TIM_HandleTypeDef *htim, int32_t value)
 
 static void Motor_Apply_Commands(void){
 	for(uint8_t i = 0; i < NUM_MOTORS; i++){
-		Set_Motor_PWM(motorTimers[i], systemState->motorValues[i]);
+		if (Bitmask_GetBit(systemState->bitmask, i)){
+			Set_Motor_PWM(motorTimers[i], systemState->motorValues[i]);
+		}
 	}
 }
 
