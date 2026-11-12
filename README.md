@@ -294,3 +294,4 @@ check against the datasheet algorithm, returns HAL_ERROR on any I2C failure or C
 
 **2. Depth sensor runtime error handling is incomplete.** Depth_Sensor_Init() checks HAL status and CRC-validates PROM data, but Depth_Sensor_Update() 's I2C calls are unchecked. A runtime I2C failure produces a silently bad depth transmission with no retry or fallback behavior. 
 
+...
